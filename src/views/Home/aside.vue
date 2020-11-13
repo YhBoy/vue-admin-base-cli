@@ -6,49 +6,63 @@
       @open="handleOpen"
       background-color="#252526"
       text-color="#ffffff"
-      active-text-color="#F88064"
+      active-text-color="#409EFF"
       router
       :collapse="collapse"
       @close="handleClose">
-      <el-menu-item index="/">
-        <i class="el-icon-menu"></i>
-        <span slot="title">首页</span>
-      </el-menu-item>
-      <el-menu-item index="/article">
-        <i class="el-icon-menu"></i>
-        <span slot="title">内容管理</span>
-      </el-menu-item>
-      <el-menu-item index="/image" >
-        <i class="el-icon-document"></i>
-        <span slot="title">素材管理</span>
-      </el-menu-item>
-      <el-menu-item index="publish">
-        <i class="el-icon-setting"></i>
-        <span slot="title">发布文章</span>
-      </el-menu-item>
-      <el-menu-item index="/comment">
-        <i class="el-icon-setting"></i>
-        <span slot="title">评论管理</span>
-      </el-menu-item>
-      <el-menu-item index="/fans">
-        <i class="iconfont iconfabu"></i>
-        <span slot="title">粉丝管理</span>
-      </el-menu-item>
-      <el-menu-item index="setting">
-        <i class="iconfont iconsucai"></i>
-        <span slot="title">个人设置</span>
+      <el-submenu index="1">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span>导航一</span>
+        </template>
+        <el-menu-item-group>
+          <template slot="title">分组一</template>
+              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-2">选项2</el-menu-item>
+          </el-menu-item-group>
+      </el-submenu>
+      <el-menu-item :index="item.path" v-for="(item) in aSideMenu" :key="item.path">
+        <i class="iconfont" :class="item.iconfont"></i>
+        <span slot="title">{{item.label}}</span>
       </el-menu-item>
     </el-menu>
     </div>
 </template>
-
 <script>
 export default {
     name:"Aside",
     props:['collapse'],
     data(){
         return {
-            
+            aSideMenu:[
+                {
+                  path:'/',
+                  label:'首页',
+                  iconfont:'iconshouye'
+                },
+                {
+                  path:'/video',
+                  label:'视频管理',
+                  iconfont:'iconsucai'
+                },
+                {
+                  path:'/user',
+                  label:'用户管理',
+                  iconfont:'iconfabu',
+                  children:[
+                      {
+                          path:'',
+                          label:'page1',
+                          iconfont:'iconfabu',
+                      },
+                      {
+                          path:'/page2',
+                          label:'page2',
+                          iconfont:'iconfabu',
+                      }
+                  ]
+                }
+            ]
         }
     },
     methods:{
@@ -63,8 +77,11 @@ export default {
 </script>
 
 <style lang="less" scope>
-    .aside /deep/ .el-menu{
-        height: 100vh;
+    // .aside /deep/ .el-menu{
+    //     height: 100vh;
+    // }
+    .aside>ul{
+      height: 100%;
     }
     .iconfont{
         margin-left: 5px;

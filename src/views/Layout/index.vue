@@ -1,6 +1,7 @@
 <template>
     <el-container class="container-wrap">
-        <el-aside width="auto" class="aside">
+        <el-aside width="200px" class="aside">
+            <!-- <Aside :collapse="collapse" /> -->
             <Aside :collapse="collapse" />
         </el-aside>
         <el-container>
