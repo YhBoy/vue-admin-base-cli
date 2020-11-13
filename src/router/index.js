@@ -9,13 +9,42 @@ const routes = [
       path:'/login',
       name:'Login',
       component:()=> import ('../views/Login/index')
+    },
+    {
+      path:'/',
+      name:'Layout',
+      component:()=> import ('../views/Layout/index'),
+      children:[
+          {
+              path:'',
+              name:'HomeIndex',
+              component:()=> import ('../views/Home/index')
+          }
+      ]
     }
+   
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
+})
+router.beforeEach((to,from,next)=>{
+    
+    
+    const token = JSON.parse(sessionStorage.getItem('user'))
+    
+    if( to.path != '/login'){
+          if( token ){
+              next()
+          }else{
+              next('/login')
+          }
+    }else{
+        next()
+    }
+    
 })
 
 export default router

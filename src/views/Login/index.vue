@@ -11,13 +11,17 @@
                 <el-checkbox v-model="ruleForm.checked">我已同意上述协议</el-checkbox>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" class="btn" @click="submitForm('ruleForm')">登录</el-button>
+                <el-button type="primary" :loading="loading" class="btn" @click="submitForm('ruleForm')">登录</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
 import request from '@/utils/request.js'
+// 密码加密
+import CryptoJS from "crypto-js";
+
+import {login} from '@/api/user.js'
 
 export default {
     name:'Login',
@@ -46,28 +50,46 @@ export default {
                 username:'',
                 password:'',
             },
-            checked:false
+            checked:false,
+            loading:false
         }
     },
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-              const params = this.ruleForm
-              console.log(params)
-              request({
-                  url:'/mp/v1_0/authorizations',
-                  method:'POST',
-                  data: params
-              }).then(res=>{
-                  debugger
-                  console.log(res)
-              }).catch(err=>{
-                  debugger
-                  console.log(err)
-              })
+              this.loading = true
+
+              // md5 加密
+            //   const username = this.ruleForm.username
+            //   const password = CryptoJS.MD5(this.ruleForm.password)
+            
+            // 实际传参 是下面这两个
+            // mobile:'13911111111',
+            // code:"246810"
+            const params = {
+                mobile:'13911111111',
+                code:"246810"
+            }
+            login(params).then(res=>{
+                sessionStorage.setItem("user",JSON.stringify(res.data.data))
+                this.$message({
+                        message: '登录成功',
+                        type: 'success'
+                });
+                this.$router.push({
+                    name:'HomeIndex'
+                })
+                this.loading = false
+            }).catch(err=>{
+                this.loading = false
+                console.log(err)
+            })
+
+              
           } else {
             console.log('error submit!!');
+            this.loading = false
             return false;
           }
         });
