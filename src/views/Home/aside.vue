@@ -1,39 +1,86 @@
 <template>
     <div class="aside">
         <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      background-color="#252526"
-      text-color="#ffffff"
-      active-text-color="#409EFF"
-      router
-      :collapse="collapse"
-      @close="handleClose">
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>导航一</span>
-        </template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-      </el-submenu>
-      <el-menu-item :index="item.path" v-for="(item) in aSideMenu" :key="item.path">
-        <i class="iconfont" :class="item.iconfont"></i>
-        <span slot="title">{{item.label}}</span>
-      </el-menu-item>
-    </el-menu>
+              :default-active="menuActiveIndex"
+              class="el-menu-vertical-demo"
+              @open="handleOpen"
+              background-color="#252526"
+              text-color="#ffffff"
+              active-text-color="#409EFF"
+              router
+              :unique-opened="true"
+              :collapse-transition="false"	
+              :collapse="collapse"
+              @close="handleClose"
+              >
+              <template  v-for="(item) in aSideMenu" >
+                  <template v-if="item.children && item.children.length > 0">
+                      <el-submenu :key="item.path" :index="item.path">
+                            <template >
+                                <template slot="title">
+                                    <i class="iconfont" :class="item.iconfont"></i>
+                                    <span >{{item.label}}</span>
+                                </template>
+                                <template>
+                                    <el-menu-item :index="subItem.path" v-for="(subItem,subKey) in item.children" :key="subKey">
+                                        <template slot="title">
+                                              <i class="iconfont" :class="item.iconfont"></i>
+                                              <span >{{subItem.label}}</span>
+                                        </template>
+                                    </el-menu-item>
+                                </template>
+                            </template>
+                    </el-submenu>
+                  </template>
+                  <template v-else>
+                        <el-menu-item :key="item.path" :index="item.path">
+                              <template slot="title">
+                                    <i class="iconfont" :class="item.iconfont"></i>
+                                    <span >{{item.label}}</span>
+                              </template>
+                          </el-menu-item>
+                  </template>
+
+                  
+
+
+              </template>
+        </el-menu>
     </div>
+    <!-- <template class="list-item" v-for="item in list">
+         <el-menu-item :key="item.meta.id" @click="handleMenuClick(`${item.name}`,`${item.meta.id}`,`${item.meta.title}`,`${item.meta.pageParams}`)" v-if="item.children==null||item.children.length==0" :index="`${item.meta.title}#${item.meta.id}`">
+             <template slot="title">
+                  <i class="mi fa" :class="item.meta.iconCls"/>
+              <span slot="title">{{item.meta.title}}</span>
+           </template>
+         </el-menu-item>
+         <el-submenu v-else :index="item.meta.id" :key="item.meta.id">
+           <template slot="title">
+             <i class="mi fa" :class="item.meta.iconCls"/>
+             <span slot="title">{{item.meta.title}}</span>
+           </template>
+           <nav-menu :list="item.children"></nav-menu>
+         </el-submenu>
+     </template> -->
 </template>
 <script>
 export default {
     name:"Aside",
     props:['collapse'],
+    computed: {
+      noChildren(){
+          return this.aSideMenu.filter(item=>!item.children)
+      },
+      hasChildren(){
+          return this.aSideMenu.filter(item=>item.children)
+      }
+    },
+    mounted(){
+        this.menuActiveIndex = this.$route.path
+    },
     data(){
         return {
+            menuActiveIndex:'',
             aSideMenu:[
                 {
                   path:'/',
@@ -61,7 +108,12 @@ export default {
                           iconfont:'iconfabu',
                       }
                   ]
-                }
+                },
+                {
+                  path:'/settings',
+                  label:'设置',
+                  iconfont:'iconsucai'
+                },
             ]
         }
     },
@@ -87,7 +139,18 @@ export default {
         margin-left: 5px;
         margin-right: 10px;
     }
-   
+    .el-menu{
+      border-right: 0;
+    }
+    .toggle{
+      background: rgb(37, 37, 38);
+      text-align: center;
+      font-size: 10px;
+      line-height: 24px;
+      color: #fff;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+    }
 </style>
 
 
