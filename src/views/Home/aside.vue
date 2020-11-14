@@ -8,7 +8,7 @@
               text-color="#ffffff"
               active-text-color="#409EFF"
               router
-              :unique-opened="true"
+              
               :collapse-transition="false"	
               :collapse="collapse"
               @close="handleClose"
@@ -40,28 +40,9 @@
                               </template>
                           </el-menu-item>
                   </template>
-
-                  
-
-
               </template>
         </el-menu>
     </div>
-    <!-- <template class="list-item" v-for="item in list">
-         <el-menu-item :key="item.meta.id" @click="handleMenuClick(`${item.name}`,`${item.meta.id}`,`${item.meta.title}`,`${item.meta.pageParams}`)" v-if="item.children==null||item.children.length==0" :index="`${item.meta.title}#${item.meta.id}`">
-             <template slot="title">
-                  <i class="mi fa" :class="item.meta.iconCls"/>
-              <span slot="title">{{item.meta.title}}</span>
-           </template>
-         </el-menu-item>
-         <el-submenu v-else :index="item.meta.id" :key="item.meta.id">
-           <template slot="title">
-             <i class="mi fa" :class="item.meta.iconCls"/>
-             <span slot="title">{{item.meta.title}}</span>
-           </template>
-           <nav-menu :list="item.children"></nav-menu>
-         </el-submenu>
-     </template> -->
 </template>
 <script>
 export default {
@@ -76,11 +57,11 @@ export default {
       }
     },
     mounted(){
-        this.menuActiveIndex = this.$route.path
+        // this.menuActiveIndex = this.$route.path
     },
     data(){
         return {
-            menuActiveIndex:'',
+            menuActiveIndex:'/',
             aSideMenu:[
                 {
                   path:'/',
@@ -93,7 +74,7 @@ export default {
                   iconfont:'iconsucai'
                 },
                 {
-                  path:'/user',
+                  path:'/user/page1',
                   label:'用户管理',
                   iconfont:'iconfabu',
                   children:[
@@ -112,7 +93,14 @@ export default {
                 {
                   path:'/settings',
                   label:'设置',
-                  iconfont:'iconsucai'
+                  iconfont:'iconsucai',
+                  children:[
+                      {
+                        path:'',
+                        label:'设置增加',
+                        iconfont:'iconsucai',
+                      }
+                  ]
                 },
             ]
         }

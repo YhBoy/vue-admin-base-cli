@@ -21,7 +21,25 @@ const routes = [
             path:'/setting',
             name:'SettingIndex',
             component:()=> import ('../views/Setting/index')
-        }
+          },
+          {
+            path:'/video',
+            name:'VideoIndex',
+            component:()=> import ('../views/Video/index')
+          },
+          {
+            path:'/user',
+            name:'UserPage1',
+            component:()=> import ('../views/User/page1'),
+            redirect:'/user/page1',
+            children:[
+                {
+                    path:'/user/page1',
+                    name:'UserPage1',
+                    component:()=> import ('../views/User/page1')  
+                }
+            ]
+          }
       ]
     }
    
